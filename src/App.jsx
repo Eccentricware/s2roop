@@ -10,6 +10,7 @@ const App = (props) => {
 
   const [interactionMode, setInteractionMode] = useState('awaitStart')
   const [currentSequence, setCurrentSequence] = useState([]);
+  const [activeLight, setActiveLight] = useState('none');
 
   var activeOptions = ['red', 'blue', 'yellow', 'green'];
 
@@ -19,11 +20,43 @@ const App = (props) => {
     extendedSequence.push(activeOptions[nextColor]);
     setCurrentSequence(extendedSequence);
     console.log(extendedSequence);
+    setTimeout(() => {
+      displayExtendedSequence(extendedSequence);
+    }, 1000);
+  }
+
+  const turnLightOn = (color) => {
+    setActiveLight(color);
+  }
+
+  const turnOffLights = () => {
+    setActiveLight('none');
+  }
+
+  const displayExtendedSequence = (sequence) => {
+    var timer = 0;
+    var timeOn = 1;
+    var timeOff = 0.1;
+    sequence.forEach((event, seqNumber) => {
+      var onTime = timer;
+      setTimeout(() => {
+        console.log(`${seqNumber}: ${event} on at ${onTime}`);
+        turnLightOn(event);
+      }, onTime * 1000);
+      timer += timeOn;
+      var offTime = timer;
+      setTimeout(() => {
+        console.log(`${seqNumber}: ${event} off at ${offTime}`);
+        turnOffLights();
+      }, offTime * 1000);
+      timer += timeOff;
+    });
   }
 
   return (
     <div className="App">
-      <CenterButtons width={width} height={height} />
+      <CenterButtons width={width} height={height} activeLight={activeLight} />
+
       <svg className="start-btn" width="100" height="50"
         viewBox="0 0 100 50"
         border="solid white 2px"

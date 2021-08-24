@@ -1,7 +1,7 @@
 import React from 'react';
 import './CenterButtons.css';
 
-const CenterButtons = ({width, height}) => {
+const CenterButtons = ({width, height, activeLight}) => {
   return (
     <svg className="center-area"
       width={width} height={height}
@@ -13,7 +13,7 @@ const CenterButtons = ({width, height}) => {
             0 , 0
             ${width / 2} , 0
           `}
-        fill="red"
+        fill={activeLight === 'red' ? 'rgb(255, 0, 0)' : 'rgb(175, 0, 0)'}
         onClick={() => { console.log('red') }}
         cursor="pointer"
       />
@@ -24,7 +24,7 @@ const CenterButtons = ({width, height}) => {
             ${width} , 0
             ${width} , ${height / 2}
           `}
-        fill="blue"
+        fill={activeLight === 'blue' ? 'blue' : 'darkblue'}
         onClick={() => { console.log('blue') }}
         cursor="pointer"
       />
@@ -35,7 +35,7 @@ const CenterButtons = ({width, height}) => {
             0 , ${height}
             0 , ${height / 2}
           `}
-        fill="yellow"
+        fill={activeLight === 'yellow' ? 'yellow' : 'rgb(200, 200, 0)'}
         onClick={() => { console.log('yellow') }}
         cursor="pointer"
       />
@@ -46,7 +46,7 @@ const CenterButtons = ({width, height}) => {
             ${width} , ${height}
             ${width / 2} , ${height}
           `}
-        fill="green"
+        fill={activeLight === 'green' ? 'rgb(0, 255, 0)' : 'darkgreen'}
         cursor="pointer"
       />
 
