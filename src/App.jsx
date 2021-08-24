@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 
+import ScoreDisplay from './ScoreDisplay/ScoreDisplay.jsx';
 import CenterButtons from './CenterButtons/CenterButtons.jsx';
 import StartButton from './StartButton/StartButton.jsx';
 
@@ -13,6 +14,9 @@ const App = (props) => {
   const [currentSequence, setCurrentSequence] = useState([]);
   const [nextAnswerIndex, setNextAnswerIndex] = useState(0);
   const [activeLight, setActiveLight] = useState('none');
+  const [round, setRound] = useState(1);
+  const [currentScore, setCurrentScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
 
   var activeOptions = ['red', 'blue', 'yellow', 'green'];
 
@@ -60,6 +64,11 @@ const App = (props) => {
   const guessColor = (color) => {
     if (color === currentSequence[nextAnswerIndex]) {
       console.log('Correct!');
+      var newCurrentScore = currentScore + round;
+      setCurrentScore(newCurrentScore);
+      if (newCurrentScore > highScore) {
+        setHighScore(newCurrentScore);
+      }
       var index = nextAnswerIndex + 1;
       setNextAnswerIndex(index);
       if (index === currentSequence.length) {
@@ -67,19 +76,23 @@ const App = (props) => {
         setNextAnswerIndex(0);
         setInteractionMode('Replay');
         extendSequence();
+        setRound(round + 1);
       } else {
-        console.log('Round stalled')
+        console.log('Round stalled');
       }
     } else {
       console.log('Game over!');
+      setCurrentScore(0);
+      setRound(1);
       setNextAnswerIndex(0);
+      setCurrentSequence([]);
       setInteractionMode('Start Game');
     }
-
   }
 
   return (
     <div className="App">
+      <ScoreDisplay currentScore={currentScore} highScore={highScore} round={round} />
       <CenterButtons width={width} height={height}
         activeLight={activeLight} guessColor={guessColor}
       />

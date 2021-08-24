@@ -1,0 +1,29 @@
+.score-box {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 200px;
+  height: 64px;
+  border: solid white 2px;
+}
+
+.current-round {
+  display: flex;
+  align-items: center;
+  color: white;
+  justify-content: center;
+}
+
+.current-score {
+  display: flex;
+  align-items: center;
+  color: white;
+  justify-content: center;
+}
+
+.high-score {
+  display: flex;
+  align-items: center;
+  color: white;
+  justify-content: center;
+}

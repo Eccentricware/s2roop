@@ -1,4 +1,8 @@
 .start-btn {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  border: solid white 2px;
   display: flex;
   width: 200px;
   height: 64px;
