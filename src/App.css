@@ -1,12 +1,5 @@
-.app {
+body {
   height: 100vh;
+  background-color: rgb(20, 20, 20);
 }
 
-.center-area {
-  position: absolute;
-  /* margin: 0 auto; */
-  left: 50%;
-  top: 50%;
-  /* height: 100vh; */
-  transform: translate(-50%, -50%);
-}

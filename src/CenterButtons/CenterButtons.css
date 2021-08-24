@@ -1,0 +1,16 @@
+.center-area {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.red-btn:hover {
+  cursor: pointer;
+}
+
+.green-btn:hover {
+  cursor: pointer;
+  border-width: 2px;
+  border-color: red;
+  border-style: solid;
+}
