@@ -1,0 +1,12 @@
+.app {
+  height: 100vh;
+}
+
+.center-area {
+  position: absolute;
+  /* margin: 0 auto; */
+  left: 50%;
+  top: 50%;
+  /* height: 100vh; */
+  transform: translate(-50%, -50%);
+}
