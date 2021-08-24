@@ -1,7 +1,11 @@
 import React from 'react';
 import './CenterButtons.css';
 
-const CenterButtons = ({width, height, activeLight}) => {
+const CenterButtons = ({width, height, activeLight, guessColor}) => {
+  const handleClick = (color) => {
+    guessColor(color);
+  }
+
   return (
     <svg className="center-area"
       width={width} height={height}
@@ -14,7 +18,7 @@ const CenterButtons = ({width, height, activeLight}) => {
             ${width / 2} , 0
           `}
         fill={activeLight === 'red' ? 'rgb(255, 0, 0)' : 'rgb(175, 0, 0)'}
-        onClick={() => { console.log('red') }}
+        onClick={() => { handleClick('red') }}
         cursor="pointer"
       />
 
@@ -25,7 +29,7 @@ const CenterButtons = ({width, height, activeLight}) => {
             ${width} , ${height / 2}
           `}
         fill={activeLight === 'blue' ? 'blue' : 'darkblue'}
-        onClick={() => { console.log('blue') }}
+        onClick={() => { handleClick('blue') }}
         cursor="pointer"
       />
 
@@ -36,7 +40,7 @@ const CenterButtons = ({width, height, activeLight}) => {
             0 , ${height / 2}
           `}
         fill={activeLight === 'yellow' ? 'yellow' : 'rgb(200, 200, 0)'}
-        onClick={() => { console.log('yellow') }}
+        onClick={() => { handleClick('yellow') }}
         cursor="pointer"
       />
 
@@ -47,6 +51,7 @@ const CenterButtons = ({width, height, activeLight}) => {
             ${width / 2} , ${height}
           `}
         fill={activeLight === 'green' ? 'rgb(0, 255, 0)' : 'darkgreen'}
+        onClick={() => { handleClick('green') }}
         cursor="pointer"
       />
 

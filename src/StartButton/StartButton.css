@@ -1,0 +1,8 @@
+.start-btn {
+  display: flex;
+  width: 200px;
+  height: 64px;
+  align-items: center;
+  color: white;
+  justify-content: center;
+}

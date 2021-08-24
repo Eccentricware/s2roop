@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import "./App.css";
 
 import CenterButtons from './CenterButtons/CenterButtons.jsx';
+import StartButton from './StartButton/StartButton.jsx';
 
 const App = (props) => {
   const [width, setWidth] = useState(500);
   const [height, setHeight] = useState(500);
   const [btnBorder, setBtnBorder] = useState(5);
 
-  const [interactionMode, setInteractionMode] = useState('awaitStart')
+  const [interactionMode, setInteractionMode] = useState('Start Game');
   const [currentSequence, setCurrentSequence] = useState([]);
+  const [nextAnswerIndex, setNextAnswerIndex] = useState(0);
   const [activeLight, setActiveLight] = useState('none');
 
   var activeOptions = ['red', 'blue', 'yellow', 'green'];
@@ -20,17 +22,8 @@ const App = (props) => {
     extendedSequence.push(activeOptions[nextColor]);
     setCurrentSequence(extendedSequence);
     console.log(extendedSequence);
-    setTimeout(() => {
-      displayExtendedSequence(extendedSequence);
-    }, 1000);
-  }
-
-  const turnLightOn = (color) => {
-    setActiveLight(color);
-  }
-
-  const turnOffLights = () => {
-    setActiveLight('none');
+    setInteractionMode('Replaying Sequence');
+    displayExtendedSequence(extendedSequence);
   }
 
   const displayExtendedSequence = (sequence) => {
@@ -51,19 +44,46 @@ const App = (props) => {
       }, offTime * 1000);
       timer += timeOff;
     });
+    setTimeout(() => {
+      setInteractionMode('Respond');
+    }, timer * 1000);
+  }
+
+  const turnLightOn = (color) => {
+    setActiveLight(color);
+  }
+
+  const turnOffLights = () => {
+    setActiveLight('none');
+  }
+
+  const guessColor = (color) => {
+    if (color === currentSequence[nextAnswerIndex]) {
+      console.log('Correct!');
+      var index = nextAnswerIndex + 1;
+      setNextAnswerIndex(index);
+      if (index === currentSequence.length) {
+        console.log('Round won!');
+        setNextAnswerIndex(0);
+        setInteractionMode('Replay');
+        extendSequence();
+      } else {
+        console.log('Round stalled')
+      }
+    } else {
+      console.log('Game over!');
+      setNextAnswerIndex(0);
+      setInteractionMode('Start Game');
+    }
+
   }
 
   return (
     <div className="App">
-      <CenterButtons width={width} height={height} activeLight={activeLight} />
-
-      <svg className="start-btn" width="100" height="50"
-        viewBox="0 0 100 50"
-        border="solid white 2px"
-        onClick={() => {extendSequence()}}
-      >
-        <text x="5" y="20">Start Game</text>
-      </svg>
+      <CenterButtons width={width} height={height}
+        activeLight={activeLight} guessColor={guessColor}
+      />
+      <StartButton extendSequence={extendSequence} interactionMode={interactionMode}/>
     </div>
   )
 }
