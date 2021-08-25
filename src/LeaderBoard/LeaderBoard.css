@@ -1,0 +1,9 @@
+.leaderboard {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  border: solid white 2px;
+  align-items: center;
+  color: white;
+  justify-content: center;
+}

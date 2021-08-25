@@ -1,4 +1,6 @@
 import React from 'react';
+import './LeaderBoard.css';
+
 import Score from '../Score/Score.jsx';
 
 const LeaderBoard = ({scores}) => {
