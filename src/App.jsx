@@ -19,11 +19,12 @@ const App = (props) => {
   const [round, setRound] = useState(1);
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [highScores, setHighScores] = useState([]);
 
   useEffect(() => {
     fetch('http://localhost:8000/api/scores')
       .then(response => response.json())
-      .then(data => console.log(data));
+      .then(data => setHighScores(data));
   });
 
   const extendSequence = () => {
@@ -110,7 +111,7 @@ const App = (props) => {
   return (
     <div className="App">
       <ScoreDisplay currentScore={currentScore} highScore={highScore} round={round} />
-      <LeaderBoard />
+      <LeaderBoard scores={highScores}/>
       <CenterButtons width={width} height={height}
         activeLight={activeLight} guessColor={guessColor}
       />

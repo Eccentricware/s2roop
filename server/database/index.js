@@ -10,7 +10,7 @@ const pool = new Pool({
 const getHighScores = (request, response) => {
   pool.query(`
     SELECT * FROM scores
-    ORDER BY score
+    ORDER BY score DESC
     LIMIT 25;
   `, (err, results) => {
     if (err) {
