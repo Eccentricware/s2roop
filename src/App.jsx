@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 import ScoreDisplay from './ScoreDisplay/ScoreDisplay.jsx';
+import LeaderBoard from './LeaderBoard/LeaderBoard.jsx';
 import CenterButtons from './CenterButtons/CenterButtons.jsx';
 import StartButton from './StartButton/StartButton.jsx';
 
@@ -11,6 +12,7 @@ const App = (props) => {
   const [btnBorder, setBtnBorder] = useState(5);
 
   const [interactionMode, setInteractionMode] = useState('Start Game');
+  const [activeOptions, setActiveOptions] = useState(['red', 'blue', 'yellow', 'green'])
   const [currentSequence, setCurrentSequence] = useState([]);
   const [nextAnswerIndex, setNextAnswerIndex] = useState(0);
   const [activeLight, setActiveLight] = useState('none');
@@ -18,7 +20,11 @@ const App = (props) => {
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
 
-  var activeOptions = ['red', 'blue', 'yellow', 'green'];
+  useEffect(() => {
+    fetch('http://localhost:8000/api/scores')
+      .then(response => response.json())
+      .then(data => console.log(data));
+  });
 
   const extendSequence = () => {
     var nextColor = Math.floor(Math.random() * activeOptions.length);
@@ -77,26 +83,38 @@ const App = (props) => {
         setInteractionMode('Replay');
         extendSequence();
         setRound(round + 1);
-      } else {
-        console.log('Round stalled');
       }
     } else {
       console.log('Game over!');
+      var score = {
+        score: currentScore,
+        round: round,
+        snags: null,
+        valid: true
+      };
       setCurrentScore(0);
       setRound(1);
       setNextAnswerIndex(0);
       setCurrentSequence([]);
       setInteractionMode('Start Game');
+      fetch('http://localhost:8000/api/scores', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(score)
+      });
     }
   }
 
   return (
     <div className="App">
       <ScoreDisplay currentScore={currentScore} highScore={highScore} round={round} />
+      <LeaderBoard />
       <CenterButtons width={width} height={height}
         activeLight={activeLight} guessColor={guessColor}
       />
-      <StartButton extendSequence={extendSequence} interactionMode={interactionMode}/>
+      <StartButton extendSequence={extendSequence} interactionMode={interactionMode} />
     </div>
   )
 }
