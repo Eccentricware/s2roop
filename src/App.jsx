@@ -14,8 +14,9 @@ const App = (props) => {
 
   const [username, setUsername] = useState('Anonymous');
   const [gameCount, setGameCount] = useState(1);
-  const [interactionMode, setInteractionMode] = useState('Start Game');
-  const [activeOptions, setActiveOptions] = useState(['red', 'blue', 'yellow', 'green'])
+  const [gameBanner, getGameBanner] = useState('Start Game?');
+  const [interactionMode, setInteractionMode] = useState('Start Game?');
+  const [activeOptions, setActiveOptions] = useState(['red', 'blue', 'yellow', 'green']);
   const [currentSequence, setCurrentSequence] = useState([]);
   const [nextAnswerIndex, setNextAnswerIndex] = useState(0);
   const [activeLight, setActiveLight] = useState('none');
@@ -30,13 +31,17 @@ const App = (props) => {
       .then(data => setHighScores(data));
   }, [gameCount]);
 
+  // useEffect(() => {
+  //   if (round === 1 && interactionMode === 'Start Game')
+  // }, [round]);
+
   const extendSequence = () => {
     var nextColor = Math.floor(Math.random() * activeOptions.length);
     var extendedSequence = currentSequence.slice();
     extendedSequence.push(activeOptions[nextColor]);
     setCurrentSequence(extendedSequence);
     console.log(extendedSequence);
-    setInteractionMode('Replaying Sequence');
+    setInteractionMode('Displaying Sequence');
     displayExtendedSequence(extendedSequence);
   }
 
@@ -72,57 +77,63 @@ const App = (props) => {
   }
 
   const guessColor = (color) => {
-    if (color === currentSequence[nextAnswerIndex]) {
-      console.log('Correct!');
-      var newCurrentScore = currentScore + round;
-      setCurrentScore(newCurrentScore);
-      if (newCurrentScore > highScore) {
-        setHighScore(newCurrentScore);
-      }
-      var index = nextAnswerIndex + 1;
-      setNextAnswerIndex(index);
-      if (index === currentSequence.length) {
-        console.log('Round won!');
+    turnLightOn(color);
+    setTimeout(() => {
+      turnOffLights();
+      if (color === currentSequence[nextAnswerIndex]) {
+        console.log('Correct!');
+        var newCurrentScore = currentScore + round;
+        setCurrentScore(newCurrentScore);
+        if (newCurrentScore > highScore) {
+          setHighScore(newCurrentScore);
+        }
+        var index = nextAnswerIndex + 1;
+        setNextAnswerIndex(index);
+        if (index === currentSequence.length) {
+          console.log('Round won!');
+          setNextAnswerIndex(0);
+          setInteractionMode('Replay');
+          extendSequence();
+          setRound(round + 1);
+        }
+      } else {
+        console.log('Game over!');
+        var score = {
+          score: currentScore,
+          username: username,
+          round: round,
+          snags: null,
+          valid: true
+        };
+        setCurrentScore(0);
+        setRound(1);
         setNextAnswerIndex(0);
-        setInteractionMode('Replay');
-        extendSequence();
-        setRound(round + 1);
+        setCurrentSequence([]);
+        var nextGameNumber = gameCount + 1;
+        setGameCount(nextGameNumber);
+        setInteractionMode('Game over!');
+        if (currentScore > 0) {
+          fetch('http://localhost:8000/api/scores', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(score)
+          });
+        }
       }
-    } else {
-      console.log('Game over!');
-      var score = {
-        score: currentScore,
-        username: username,
-        round: round,
-        snags: null,
-        valid: true
-      };
-      setCurrentScore(0);
-      setRound(1);
-      setNextAnswerIndex(0);
-      setCurrentSequence([]);
-      var nextGameNumber = gameCount + 1;
-      setGameCount(nextGameNumber);
-      setInteractionMode('Start Game');
-      if (currentScore > 0) {
-        fetch('http://localhost:8000/api/scores', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(score)
-        });
-      }
-    }
+    }, 175);
   }
 
   return (
     <div className="App">
+      <div id="title"></div>
       <ScoreDisplay currentScore={currentScore} highScore={highScore} round={round} />
       <LeaderBoard scores={highScores}/>
       <CenterButtons width={width} height={height}
         activeLight={activeLight} guessColor={guessColor}
       />
+      <div id="game-banner">{interactionMode}</div>
       <Username username={username} setUsername={setUsername}/>
       <StartButton extendSequence={extendSequence} interactionMode={interactionMode} />
     </div>

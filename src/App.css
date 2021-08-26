@@ -2,3 +2,20 @@ body {
   height: 100vh;
   background-color: rgb(20, 20, 20);
 }
+
+#game-banner {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,250px);
+  position: absolute;
+  /* left: 0px; */
+  /* bottom: 0px; */
+  border: solid rgb(255 255 255) 2px;
+  display: flex;
+  width: 250px;
+  height: 64px;
+  align-items: center;
+  color: rgb(255 255 255);
+  justify-content: center;
+  cursor: pointer;
+}

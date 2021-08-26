@@ -6,7 +6,7 @@ const StartButton = ({extendSequence, interactionMode}) => {
     <div className="start-btn"
       onClick={() => { extendSequence() }}
     >
-      {interactionMode}
+      Start Game
     </div>
   )
 }
