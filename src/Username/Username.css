@@ -1,0 +1,12 @@
+.username {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  border: solid white 2px;
+  display: flex;
+  width: 200px;
+  height: 64px;
+  align-items: center;
+  color: white;
+  justify-content: center;
+}

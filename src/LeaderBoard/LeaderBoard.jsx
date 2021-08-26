@@ -10,15 +10,20 @@ const LeaderBoard = ({scores}) => {
       <div className="leaderboard-header">Top Scores:</div>
       <table>
         <thead>
-          <td>Score</td>
-          <td>Player</td>
-          <td>Round</td>
+          <tr>
+            <td>Rank</td>
+            <td>Score</td>
+            <td>Player</td>
+            <td>Round</td>
+          </tr>
         </thead>
-        {
-          scores.map(score => {
-            return <Score key={score.score_id} score={score}/>
-          })
-        }
+        <tbody>
+          {
+            scores.map((score, index) => {
+              return <Score key={score.score_id} rank={index + 1} score={score}/>
+            })
+          }
+        </tbody>
       </table>
     </div>
   )

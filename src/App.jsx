@@ -4,6 +4,7 @@ import "./App.css";
 import ScoreDisplay from './ScoreDisplay/ScoreDisplay.jsx';
 import LeaderBoard from './LeaderBoard/LeaderBoard.jsx';
 import CenterButtons from './CenterButtons/CenterButtons.jsx';
+import Username from './Username/Username.jsx';
 import StartButton from './StartButton/StartButton.jsx';
 
 const App = (props) => {
@@ -11,6 +12,8 @@ const App = (props) => {
   const [height, setHeight] = useState(500);
   const [btnBorder, setBtnBorder] = useState(5);
 
+  const [username, setUsername] = useState('Anonymous');
+  const [gameCount, setGameCount] = useState(1);
   const [interactionMode, setInteractionMode] = useState('Start Game');
   const [activeOptions, setActiveOptions] = useState(['red', 'blue', 'yellow', 'green'])
   const [currentSequence, setCurrentSequence] = useState([]);
@@ -25,7 +28,7 @@ const App = (props) => {
     fetch('http://localhost:8000/api/scores')
       .then(response => response.json())
       .then(data => setHighScores(data));
-  });
+  }, [gameCount]);
 
   const extendSequence = () => {
     var nextColor = Math.floor(Math.random() * activeOptions.length);
@@ -89,6 +92,7 @@ const App = (props) => {
       console.log('Game over!');
       var score = {
         score: currentScore,
+        username: username,
         round: round,
         snags: null,
         valid: true
@@ -97,14 +101,18 @@ const App = (props) => {
       setRound(1);
       setNextAnswerIndex(0);
       setCurrentSequence([]);
+      var nextGameNumber = gameCount + 1;
+      setGameCount(nextGameNumber);
       setInteractionMode('Start Game');
-      fetch('http://localhost:8000/api/scores', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(score)
-      });
+      if (currentScore > 0) {
+        fetch('http://localhost:8000/api/scores', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(score)
+        });
+      }
     }
   }
 
@@ -115,6 +123,7 @@ const App = (props) => {
       <CenterButtons width={width} height={height}
         activeLight={activeLight} guessColor={guessColor}
       />
+      <Username username={username} setUsername={setUsername}/>
       <StartButton extendSequence={extendSequence} interactionMode={interactionMode} />
     </div>
   )
