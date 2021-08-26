@@ -31,8 +31,20 @@ const submitScore = (request, response) => {
   `, (err, results) => {
     if (err) {
       throw err;
+    } else {
+      pool.query(`
+        SELECT * FROM scores
+        WHERE VALID = true
+        ORDER BY score DESC, username
+        LIMIT 10;
+      `, (err, results) => {
+        if (err) {
+          throw err;
+        } else {
+          response.send(results.rows);
+        }
+      });
     }
-    response.send(results.rows);
   });
 };
 

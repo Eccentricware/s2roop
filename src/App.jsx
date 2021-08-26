@@ -29,7 +29,7 @@ const App = (props) => {
     fetch('http://localhost:8000/api/scores')
       .then(response => response.json())
       .then(data => setHighScores(data));
-  }, [gameCount]);
+  }, []);
 
   // useEffect(() => {
   //   if (round === 1 && interactionMode === 'Start Game')
@@ -77,7 +77,9 @@ const App = (props) => {
   }
 
   const guessColor = (color) => {
-    turnLightOn(color);
+    if (nextAnswerIndex !== currentSequence.length - 1) {
+      turnLightOn(color);
+    }
     setTimeout(() => {
       turnOffLights();
       if (color === currentSequence[nextAnswerIndex]) {
@@ -90,7 +92,7 @@ const App = (props) => {
         var index = nextAnswerIndex + 1;
         setNextAnswerIndex(index);
         if (index === currentSequence.length) {
-          console.log('Round won!');
+          setInteractionMode('Round won!');
           setNextAnswerIndex(0);
           setInteractionMode('Replay');
           extendSequence();
@@ -119,7 +121,9 @@ const App = (props) => {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify(score)
-          });
+          })
+            .then(response => response.json())
+            .then(data => setHighScores(data));
         }
       }
     }, 175);
