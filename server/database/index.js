@@ -1,11 +1,5 @@
 const Pool = require('pg').Pool;
-const pool = new Pool({
-  database: 's2roop',
-  host: 'localhost',
-  port: 5432,
-  user: 'querybot',
-  password: 'the_gathering'
-});
+const pool = new Pool("secretPool");
 
 const getHighScores = (request, response) => {
   pool.query(`
